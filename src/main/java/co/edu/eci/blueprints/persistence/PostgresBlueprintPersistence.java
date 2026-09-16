@@ -3,7 +3,6 @@ package co.edu.eci.blueprints.persistence;
 import co.edu.eci.blueprints.model.Blueprint;
 import co.edu.eci.blueprints.model.BlueprintPK;
 import co.edu.eci.blueprints.model.Point;
-import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Primary;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -13,12 +12,14 @@ import java.util.List;
 import java.util.Set;
 
 @Repository
-@Primary 
-@RequiredArgsConstructor 
+@Primary
 public class PostgresBlueprintPersistence implements BlueprintPersistence {
 
-  
-    private final BlueprintJpaRepository repository; 
+    private final BlueprintJpaRepository repository;
+
+    public PostgresBlueprintPersistence(BlueprintJpaRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public void saveBlueprint(Blueprint bp) throws BlueprintPersistenceException {
