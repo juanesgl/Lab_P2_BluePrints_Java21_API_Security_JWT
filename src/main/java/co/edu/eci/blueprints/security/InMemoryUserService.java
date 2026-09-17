@@ -7,6 +7,7 @@ import java.util.Map;
 @Service
 public class InMemoryUserService {
     private final Map<String, String> users; // username -> hash
+    private final Map<String, String> userScopes;
     private final PasswordEncoder encoder;
 
     public InMemoryUserService(PasswordEncoder encoder) {
@@ -14,6 +15,11 @@ public class InMemoryUserService {
         this.users = Map.of(
             "student", encoder.encode("student123"),
             "assistant", encoder.encode("assistant123")
+        );
+
+        this.userScopes = Map.of(
+            "student", "blueprints.read",
+            "assistant", "blueprints.read"
         );
     }
 
