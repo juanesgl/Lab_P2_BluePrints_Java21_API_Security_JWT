@@ -126,7 +126,6 @@ public class InMemoryUserService {
 }
 ```
 
-
 ### 2. Protección a Nivel de Método (@PreAuthorize)
 Aunque las reglas generales de enrutamiento se definen en `SecurityConfig`, la autorización detallada de las operaciones de negocio se delegó a la capa de controladores.
 
@@ -135,6 +134,8 @@ Dado que la aplicación cuenta con `@EnableMethodSecurity`, decidimos aplicar el
 - **Operaciones de Lectura (GET):** Se protegieron con `@PreAuthorize("hasAuthority('SCOPE_blueprints.read')")`.
 - **Operaciones de Escritura (POST, PUT):** Se protegieron con `@PreAuthorize("hasAuthority('SCOPE_blueprints.write')")`.
 
+![Octava Imagen](../img/8.png)
+
 ### 3. Verificación de Seguridad (Pruebas de Acceso)
 Para comprobar la correcta implementación del modelo de seguridad, se ejecutaron las siguientes pruebas:
 
@@ -142,3 +143,44 @@ Para comprobar la correcta implementación del modelo de seguridad, se ejecutaro
 2. **Prueba de Lectura (Éxito):** Al realizar una petición `GET /blueprints` con el token del estudiante, el servidor responde correctamente con HTTP `200 OK`.
 3. **Prueba de Escritura (Bloqueo):** Al intentar ejecutar un `POST /blueprints` con el mismo token del estudiante, el servidor deniega la operación y devuelve un HTTP `403 Forbidden`, confirmando que el endpoint de escritura está blindado contra usuarios no autorizados.
 
+![Novena Imagen](../img/9.png)
+
+![Decima Imagen](../img/10.png)
+
+Como se evidencia en la **primera imagen**, el proceso de autenticación del usuario `student` genera un JWT cuyo payload ahora refleja un único permiso (`scope: "blueprints.read"`). Al utilizar este token en la cabecera de autorización para consultar los planos (`GET /blueprints`), el servidor valida el *scope* y autoriza la operación exitosamente.
+
+Por otro lado, la **segunda imagen** demuestra la efectividad de la protección a nivel de método. Al intentar inyectar un nuevo plano mediante una petición `POST`, el interceptor de Spring Security detecta la ausencia del permiso `blueprints.write` en el token y bloquea la transacción inmediatamente, retornando el estado `403 Forbidden`.
+
+Con esta validación, se confirma que la vulnerabilidad de **sobreprivilegio** ha sido mitigada y que el control de acceso basado en roles (**RBAC**) está funcionando correctamente en los endpoints de negocio.
+
+---
+
+## Actividad 4
+
+El tiempo de vida de los tokens (Time-To-Live o TTL) no está "quemado" en el código, sino que se parametriza dinámicamente utilizando el sistema de propiedades y perfiles de Spring Boot.
+
+### 1. Trazabilidad de la Configuración
+El flujo mediante el cual se determina cuándo expira un token sigue esta ruta en la arquitectura:
+
+1. **`application.yml`:** La raíz de la configuración está en la propiedad `blueprints.security.token-ttl-seconds` (por ejemplo, con un valor por defecto de 3600).
+2. **`RsaKeyProperties.java`:** Gracias a la anotación `@ConfigurationProperties(prefix = "blueprints.security")`, Spring Boot inyecta automáticamente el valor numérico definido en el YAML dentro de este *record* de configuración.
+3. **`AuthController.java`:** El controlador inyecta la clase `RsaKeyProperties` y extrae el valor. Luego, toma la hora exacta de emisión (`Instant.now()`), le suma esos segundos, y usa el resultado para sellar el *claim* `exp` dentro del JWT. Finalmente, también expone ese valor al cliente en el JSON de respuesta bajo la llave `expires_in`.
+
+---
+
+### 2. Pruebas de Comportamiento del JWT
+
+Para comprobar la robustez de este flujo, realizamos alteraciones en el `application.yml` y analizamos la respuesta del servidor:
+
+**A. Prueba con TTL Corto (30 segundos)**
+* Al ajustar `token-ttl-seconds: 30`, el endpoint `/auth/login` devuelve correctamente `"expires_in": 30`.
+* Al decodificar el payload en Base64, la diferencia matemática entre las marcas de tiempo de `exp` (Expiración) e `iat` (Emisión) es exactamente de 30 segundos.
+* **Resultado del acceso:** Al intentar consumir un endpoint protegido (ej. `GET /blueprints`) transcurridos los 30 segundos, el *Resource Server* de Spring Security intercepta el JWT, detecta que la firma temporal ya caducó y bloquea la transacción devolviendo un código **`HTTP/1.1 401 Unauthorized`** (indicando que la credencial es inválida).
+
+
+
+
+
+**B. Prueba con TTL Largo (1 día / 86400 segundos)**
+* Al ajustar `token-ttl-seconds: 86400`, la aplicación escala la vigencia del token sin problemas.
+* Al inspeccionar el payload, se constata que la diferencia entre `iat` y `exp` es matemáticamente consistente (exactamente 24 horas en formato Unix). Esto demuestra que el sistema es flexible para manejar sesiones prolongadas si los requerimientos de negocio o la configuración de seguridad lo ameritan.

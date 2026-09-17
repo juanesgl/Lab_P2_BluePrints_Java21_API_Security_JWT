@@ -27,4 +27,8 @@ public class InMemoryUserService {
         String hash = users.get(username);
         return hash != null && encoder.matches(rawPassword, hash);
     }
+
+    public String getScopes(String username) {
+        return userScopes.getOrDefault(username, "");
+    }
 }
