@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS blueprints (
 );
 
 CREATE TABLE IF NOT EXISTS points (
-    id SERIAL PRIMARY KEY
+    id SERIAL PRIMARY KEY,
     blueprint_author VARCHAR(100) NOT NULL,
     blueprint_name VARCHAR(100) NOT NULL,
     x INT NOT NULL,
