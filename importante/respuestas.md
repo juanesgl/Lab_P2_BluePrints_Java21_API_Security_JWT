@@ -184,3 +184,20 @@ Para comprobar la robustez de este flujo, realizamos alteraciones en el `applica
 **B. Prueba con TTL Largo (1 día / 86400 segundos)**
 * Al ajustar `token-ttl-seconds: 86400`, la aplicación escala la vigencia del token sin problemas.
 * Al inspeccionar el payload, se constata que la diferencia entre `iat` y `exp` es matemáticamente consistente (exactamente 24 horas en formato Unix). Esto demuestra que el sistema es flexible para manejar sesiones prolongadas si los requerimientos de negocio o la configuración de seguridad lo ameritan.
+
+## Actividad 5 — Documentación con Swagger
+
+Para finalizar con las actividades propuestas, se documentaron los endpoints de autenticación y de negocio de la API mediante Swagger/OpenAPI. La configuración global de seguridad (Bearer JWT) se definió en `OpenApiConfig.java`, y cada controlador (`BlueprintsAPIController` y `AuthController`) fue enriquecido con anotaciones como `@Tag`, `@Operation` y `@ApiResponses` para describir detalladamente su funcionalidad, requerimientos y posibles respuestas.
+
+### Evidencias de la configuración de Swagger
+
+A continuación, se presentan las evidencias (capturas de pantalla) de la interfaz de Swagger UI (accesible en `http://localhost:8080/swagger-ui.html`):
+
+1. **Captura general de la interfaz de Swagger UI** mostrando ambos controladores (Blueprints y Autenticación).
+   ![Evidencia Swagger 1](../img/swagger_1.png)
+
+2. **Captura del botón Authorize**, demostrando que la API exige configuración del token Bearer para probar los endpoints.
+   ![Evidencia Swagger 2](../img/swagger_2.png)
+
+3. **Captura de la documentación detallada del endpoint `/auth/login`**, mostrando los modelos esperados de Request (`LoginRequest`) y Response (`TokenResponse`), así como los códigos de estado HTTP configurados (200, 401).
+   ![Evidencia Swagger 3](../img/swagger_3.png)
