@@ -34,8 +34,8 @@ La API se configura como un **Resource Server**, protegido mediante tokens Beare
 
 Para organizar el desarrollo y las evidencias del laboratorio, se crearon dos archivos `.md`:
 
-- **`importante.md`**: contiene las instrucciones para la ejecución de la aplicación y la información relevante para su configuración y funcionamiento.
-- **`respuestas.md`**: contiene la retrospectiva de las actividades propuestas, junto con las respectivas evidencias y respuestas para cada punto.
+- **[`importante.md`](./importante/importante.md)**: contiene las instrucciones para la ejecución de la aplicación y la información relevante para su configuración y funcionamiento.
+- **[`respuestas.md`](./importante/respuestas.md)**: contiene la retrospectiva de las actividades propuestas, junto con las respectivas evidencias y respuestas para cada punto.
 
 ---
 
@@ -49,6 +49,6 @@ Proyecto educativo con fines académicos – Escuela Colombiana de Ingeniería J
 
 Durante el desarrollo en esta rama, se implementó y completó la **Actividad 5**, la cual estaba pendiente. Específicamente:
 - Se añadió la documentación de Swagger/OpenAPI al controlador de autenticación (`AuthController`).
-- Se completó la retrospectiva y se detallaron las evidencias en el archivo `respuestas.md`.
+- Se completó la retrospectiva y se detallaron las evidencias en el archivo [`respuestas.md`](./importante/respuestas.md).
 
-> **Nota:** El detalle completo de la implementación, así como las evidencias de funcionamiento de Swagger, se encuentran documentados en `importante/respuestas.md`.
+> **Nota:** El detalle completo de la implementación, así como las evidencias de funcionamiento de Swagger, se encuentran documentados en [`importante/respuestas.md`](./importante/respuestas.md).
