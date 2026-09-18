@@ -7,6 +7,10 @@ Content-Type: application/json
   "password": "student123"
 }
 
+> {%
+    client.global.set("access_token", response.body.access_token);
+%}
+
 ### Listar blueprints (usar token)
 GET http://localhost:8080/api/blueprints
 Authorization: Bearer {{access_token}}
