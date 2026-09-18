@@ -42,13 +42,3 @@ Para organizar el desarrollo y las evidencias del laboratorio, se crearon dos ar
 ## Licencia
 
 Proyecto educativo con fines académicos – Escuela Colombiana de Ingeniería Julio Garavito.
-
----
-
-## Cambios realizados en la rama `newthingy`
-
-Durante el desarrollo en esta rama, se implementó y completó la **Actividad 5**, la cual estaba pendiente. Específicamente:
-- Se añadió la documentación de Swagger/OpenAPI al controlador de autenticación (`AuthController`).
-- Se completó la retrospectiva y se detallaron las evidencias en el archivo [`respuestas.md`](./importante/respuestas.md).
-
-> **Nota:** El detalle completo de la implementación, así como las evidencias de funcionamiento de Swagger, se encuentran documentados en [`importante/respuestas.md`](./importante/respuestas.md).
