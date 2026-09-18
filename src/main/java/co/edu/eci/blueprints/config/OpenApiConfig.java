@@ -10,18 +10,19 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class OpenApiConfig {
-    @Bean
-    public OpenAPI api() {
-        return new OpenAPI()
-          .info(new Info().title("BluePrints API")
+  @Bean
+  public OpenAPI api() {
+    return new OpenAPI()
+        .info(new Info().title("BluePrints API")
             .version("2.0")
-            .description("Parte 2 — Seguridad con JWT (OAuth 2.0)"))
-          .addSecurityItem(new SecurityRequirement().addList("bearer-jwt"))
-          .components(new Components().addSecuritySchemes("bearer-jwt",
+            .description(
+                "API REST para la administración, renderizado y persistencia de planos arquitectónicos (BluePrints). Endpoints protegidos mediante Bearer JWT. "))
+        .addSecurityItem(new SecurityRequirement().addList("bearer-jwt"))
+        .components(new Components().addSecuritySchemes("bearer-jwt",
             new SecurityScheme()
-              .name("bearer-jwt")
-              .type(SecurityScheme.Type.HTTP)
-              .scheme("bearer")
-              .bearerFormat("JWT")));
-    }
+                .name("bearer-jwt")
+                .type(SecurityScheme.Type.HTTP)
+                .scheme("bearer")
+                .bearerFormat("JWT")));
+  }
 }
